@@ -1,0 +1,8 @@
+# Default owners for the repository
+* @ajaychinthapalli
+
+# Stronger ownership for critical project files
+/README.md @ajaychinthapalli
+/docs/ @ajaychinthapalli
+/data/ @ajaychinthapalli
+/rightsize_ec2.py @ajaychinthapalli
