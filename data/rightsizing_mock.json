@@ -1,0 +1,246 @@
+{
+  "region": "us-east-2",
+  "window_days": 14,
+  "instances": [
+    {
+      "instance_id": "i-mock01overprov",
+      "name": "batch-api-prod",
+      "is_eks_node": false,
+      "instance_type": "m5.2xlarge",
+      "specs": {
+        "vcpu": 8,
+        "memory_gib": 32.0,
+        "arch": [
+          "x86_64"
+        ],
+        "network": "Up to 10 Gigabit",
+        "burstable": false
+      },
+      "observed_hours": 336,
+      "requested_hours": 336,
+      "cpu_avg_pct": 9.2,
+      "cpu_p95_pct": 22.0,
+      "cpu_max_pct": 41.0,
+      "network_in_peak_mbps": 4.2,
+      "network_out_peak_mbps": 2.1,
+      "memory_source": "CWAgent/mem_used_percent",
+      "mem_avg_pct": 28.0,
+      "mem_p95_pct": 33.0,
+      "mem_max_pct": 40.0
+    },
+    {
+      "instance_id": "i-mock02rightsz",
+      "name": "web-prod-1",
+      "is_eks_node": false,
+      "instance_type": "m5.large",
+      "specs": {
+        "vcpu": 2,
+        "memory_gib": 8.0,
+        "arch": [
+          "x86_64"
+        ],
+        "network": "Up to 10 Gigabit",
+        "burstable": false
+      },
+      "observed_hours": 336,
+      "requested_hours": 336,
+      "cpu_avg_pct": 34.0,
+      "cpu_p95_pct": 52.0,
+      "cpu_max_pct": 71.0,
+      "network_in_peak_mbps": 35.0,
+      "network_out_peak_mbps": 22.0,
+      "memory_source": "CWAgent/mem_used_percent",
+      "mem_avg_pct": 55.0,
+      "mem_p95_pct": 61.0,
+      "mem_max_pct": 68.0
+    },
+    {
+      "instance_id": "i-mock03undersz",
+      "name": "worker-prod",
+      "is_eks_node": false,
+      "instance_type": "c5.large",
+      "specs": {
+        "vcpu": 2,
+        "memory_gib": 4.0,
+        "arch": [
+          "x86_64"
+        ],
+        "network": "Up to 10 Gigabit",
+        "burstable": false
+      },
+      "observed_hours": 336,
+      "requested_hours": 336,
+      "cpu_avg_pct": 78.0,
+      "cpu_p95_pct": 96.0,
+      "cpu_max_pct": 100.0,
+      "network_in_peak_mbps": 60.0,
+      "network_out_peak_mbps": 48.0,
+      "memory_source": "CWAgent/mem_used_percent",
+      "mem_avg_pct": 62.0,
+      "mem_p95_pct": 74.0,
+      "mem_max_pct": 81.0
+    },
+    {
+      "instance_id": "i-mock04membound",
+      "name": "cache-prod",
+      "is_eks_node": false,
+      "instance_type": "r5.large",
+      "specs": {
+        "vcpu": 2,
+        "memory_gib": 16.0,
+        "arch": [
+          "x86_64"
+        ],
+        "network": "Up to 10 Gigabit",
+        "burstable": false
+      },
+      "observed_hours": 336,
+      "requested_hours": 336,
+      "cpu_avg_pct": 8.0,
+      "cpu_p95_pct": 15.0,
+      "cpu_max_pct": 27.0,
+      "network_in_peak_mbps": 12.0,
+      "network_out_peak_mbps": 9.0,
+      "memory_source": "CWAgent/mem_used_percent",
+      "mem_avg_pct": 82.0,
+      "mem_p95_pct": 91.0,
+      "mem_max_pct": 95.0
+    },
+    {
+      "instance_id": "i-mock05nomemory",
+      "name": "reports-stg",
+      "is_eks_node": false,
+      "instance_type": "m5.xlarge",
+      "specs": {
+        "vcpu": 4,
+        "memory_gib": 16.0,
+        "arch": [
+          "x86_64"
+        ],
+        "network": "Up to 10 Gigabit",
+        "burstable": false
+      },
+      "observed_hours": 336,
+      "requested_hours": 336,
+      "cpu_avg_pct": 7.0,
+      "cpu_p95_pct": 20.0,
+      "cpu_max_pct": 38.0,
+      "network_in_peak_mbps": 2.0,
+      "network_out_peak_mbps": 1.0,
+      "memory_source": null,
+      "mem_avg_pct": null,
+      "mem_p95_pct": null,
+      "mem_max_pct": null
+    },
+    {
+      "instance_id": "i-mock06newinst",
+      "name": "canary-dev",
+      "is_eks_node": false,
+      "instance_type": "m5.large",
+      "specs": {
+        "vcpu": 2,
+        "memory_gib": 8.0,
+        "arch": [
+          "x86_64"
+        ],
+        "network": "Up to 10 Gigabit",
+        "burstable": false
+      },
+      "observed_hours": 30,
+      "requested_hours": 336,
+      "cpu_avg_pct": 12.0,
+      "cpu_p95_pct": 25.0,
+      "cpu_max_pct": 33.0,
+      "network_in_peak_mbps": 1.0,
+      "network_out_peak_mbps": 0.4,
+      "memory_source": "CWAgent/mem_used_percent",
+      "mem_avg_pct": 30.0,
+      "mem_p95_pct": 35.0,
+      "mem_max_pct": 38.0
+    },
+    {
+      "instance_id": "i-mock07burstcpu",
+      "name": "ci-runner-dev",
+      "is_eks_node": false,
+      "instance_type": "t3.small",
+      "specs": {
+        "vcpu": 2,
+        "memory_gib": 2.0,
+        "arch": [
+          "x86_64"
+        ],
+        "network": "Up to 5 Gigabit",
+        "burstable": true
+      },
+      "observed_hours": 336,
+      "requested_hours": 336,
+      "cpu_avg_pct": 35.0,
+      "cpu_p95_pct": 60.0,
+      "cpu_max_pct": 100.0,
+      "network_in_peak_mbps": 8.0,
+      "network_out_peak_mbps": 5.0,
+      "memory_source": "CWAgent/mem_used_percent",
+      "mem_avg_pct": 58.0,
+      "mem_p95_pct": 72.0,
+      "mem_max_pct": 80.0,
+      "cpu_credit_balance_min": 0.0,
+      "cpu_surplus_credits_max": 45.0
+    },
+    {
+      "instance_id": "i-mock08idle",
+      "name": "old-test-box",
+      "is_eks_node": false,
+      "instance_type": "t3.large",
+      "specs": {
+        "vcpu": 2,
+        "memory_gib": 8.0,
+        "arch": [
+          "x86_64"
+        ],
+        "network": "Up to 5 Gigabit",
+        "burstable": true
+      },
+      "observed_hours": 336,
+      "requested_hours": 336,
+      "cpu_avg_pct": 1.2,
+      "cpu_p95_pct": 4.0,
+      "cpu_max_pct": 9.0,
+      "network_in_peak_mbps": 0.1,
+      "network_out_peak_mbps": 0.05,
+      "memory_source": "CWAgent/mem_used_percent",
+      "mem_avg_pct": 14.0,
+      "mem_p95_pct": 18.0,
+      "mem_max_pct": 22.0,
+      "cpu_credit_balance_min": 576.0,
+      "cpu_surplus_credits_max": 0.0
+    },
+    {
+      "instance_id": "i-mock09eksnode",
+      "name": "eks-dev-ng-Node",
+      "is_eks_node": true,
+      "instance_type": "t3.small",
+      "specs": {
+        "vcpu": 2,
+        "memory_gib": 2.0,
+        "arch": [
+          "x86_64"
+        ],
+        "network": "Up to 5 Gigabit",
+        "burstable": true
+      },
+      "observed_hours": 336,
+      "requested_hours": 336,
+      "cpu_avg_pct": 11.0,
+      "cpu_p95_pct": 24.0,
+      "cpu_max_pct": 38.0,
+      "network_in_peak_mbps": 3.0,
+      "network_out_peak_mbps": 2.0,
+      "memory_source": "ContainerInsights/node_memory_utilization",
+      "mem_avg_pct": 41.0,
+      "mem_p95_pct": 52.0,
+      "mem_max_pct": 58.0,
+      "cpu_credit_balance_min": 310.0,
+      "cpu_surplus_credits_max": 0.0
+    }
+  ]
+}

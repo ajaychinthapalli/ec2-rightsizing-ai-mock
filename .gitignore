@@ -1,0 +1,23 @@
+# Python virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Local environment and editor files
+.idea/
+.vscode/
+.DS_Store
+
+# Logs and generated outputs
+*.log
+
+# AWS / local config
+.aws/
+.env
