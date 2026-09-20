@@ -1,4 +1,4 @@
-# AI-assisted EC2 right-sizing with CloudWatch data and Claude on Amazon Bedrock
+# AI-assisted EC2 right-sizing with CloudWatch metrics and Claude on Amazon Bedrock
 
 Turns CloudWatch utilization metrics into per-instance right-sizing recommendations
 (keep, downsize, upsize, terminate-candidate) using Claude on Amazon Bedrock, and
