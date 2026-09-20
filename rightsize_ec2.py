@@ -17,6 +17,7 @@ Usage:
 Required IAM: ec2:DescribeInstances, ec2:DescribeInstanceTypes,
 cloudwatch:GetMetricData, cloudwatch:ListMetrics, bedrock:InvokeModel (for AI step).
 """
+
 import argparse
 import json
 import statistics
@@ -91,7 +92,7 @@ def get_type_specs(ec2, types):
     specs = {}
     types = sorted(set(types))
     for i in range(0, len(types), 100):
-        resp = ec2.describe_instance_types(InstanceTypes=types[i:i + 100])
+        resp = ec2.describe_instance_types(InstanceTypes=types[i : i + 100])
         for t in resp["InstanceTypes"]:
             specs[t["InstanceType"]] = {
                 "vcpu": t["VCpuInfo"]["DefaultVCpus"],
@@ -150,7 +151,9 @@ def summarize_instance(cw, inst, spec, start, end, days):
     ]
     if spec["burstable"]:
         qs.append(query("credit_min", "AWS/EC2", "CPUCreditBalance", dims, "Minimum"))
-        qs.append(query("surplus_max", "AWS/EC2", "CPUSurplusCreditsCharged", dims, "Maximum"))
+        qs.append(
+            query("surplus_max", "AWS/EC2", "CPUSurplusCreditsCharged", dims, "Maximum")
+        )
 
     mem = find_memory_metric(cw, iid)
     if mem:
@@ -167,7 +170,9 @@ def summarize_instance(cw, inst, spec, start, end, days):
 
     summary = {
         "instance_id": iid,
-        "name": next((t["Value"] for t in inst.get("Tags", []) if t["Key"] == "Name"), None),
+        "name": next(
+            (t["Value"] for t in inst.get("Tags", []) if t["Key"] == "Name"), None
+        ),
         "is_eks_node": any(
             t["Key"].startswith(("kubernetes.io/cluster/", "eks:", "aws:eks:"))
             for t in inst.get("Tags", [])
@@ -188,8 +193,12 @@ def summarize_instance(cw, inst, spec, start, end, days):
         "mem_max_pct": rnd(max(d["mem_max"])) if d.get("mem_max") else None,
     }
     if spec["burstable"]:
-        summary["cpu_credit_balance_min"] = rnd(min(d["credit_min"])) if d.get("credit_min") else None
-        summary["cpu_surplus_credits_max"] = rnd(max(d["surplus_max"])) if d.get("surplus_max") else None
+        summary["cpu_credit_balance_min"] = (
+            rnd(min(d["credit_min"])) if d.get("credit_min") else None
+        )
+        summary["cpu_surplus_credits_max"] = (
+            rnd(max(d["surplus_max"])) if d.get("surplus_max") else None
+        )
     return summary
 
 
@@ -198,19 +207,31 @@ def ask_claude(region, model_id, payload):
     resp = br.converse(
         modelId=model_id,
         system=[{"text": SYSTEM_PROMPT}],
-        messages=[{"role": "user", "content": [{"text": json.dumps(payload, indent=2)}]}],
+        messages=[
+            {"role": "user", "content": [{"text": json.dumps(payload, indent=2)}]}
+        ],
         inferenceConfig={"maxTokens": 4000},
     )
     return resp["output"]["message"]["content"][0]["text"]
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     ap.add_argument("--region", required=True)
     ap.add_argument("--days", type=int, default=14)
-    ap.add_argument("--tag", action="append", default=[], help="Key=Value filter, repeatable")
-    ap.add_argument("--model-id", help="Bedrock model ID or inference profile ID; omit to skip the AI step")
-    ap.add_argument("--input", help="Use an existing summary JSON (e.g. mock data) instead of collecting from AWS")
+    ap.add_argument(
+        "--tag", action="append", default=[], help="Key=Value filter, repeatable"
+    )
+    ap.add_argument(
+        "--model-id",
+        help="Bedrock model ID or inference profile ID; omit to skip the AI step",
+    )
+    ap.add_argument(
+        "--input",
+        help="Use an existing summary JSON (e.g. mock data) instead of collecting from AWS",
+    )
     ap.add_argument("--out", default="rightsizing.json")
     args = ap.parse_args()
 
@@ -218,7 +239,10 @@ def main():
         with open(args.input) as f:
             payload = json.load(f)
         results = payload["instances"]
-        print(f"Loaded {len(results)} instances from {args.input} (no AWS collection)", file=sys.stderr)
+        print(
+            f"Loaded {len(results)} instances from {args.input} (no AWS collection)",
+            file=sys.stderr,
+        )
     else:
         ec2 = boto3.client("ec2", region_name=args.region)
         cw = boto3.client("cloudwatch", region_name=args.region)
@@ -233,24 +257,44 @@ def main():
 
         results = []
         for inst in instances:
-            print(f"Collecting {inst['InstanceId']} ({inst['InstanceType']})...", file=sys.stderr)
-            results.append(summarize_instance(cw, inst, specs[inst["InstanceType"]], start, end, args.days))
+            print(
+                f"Collecting {inst['InstanceId']} ({inst['InstanceType']})...",
+                file=sys.stderr,
+            )
+            results.append(
+                summarize_instance(
+                    cw, inst, specs[inst["InstanceType"]], start, end, args.days
+                )
+            )
 
-        payload = {"region": args.region, "window_days": args.days, "instances": results}
+        payload = {
+            "region": args.region,
+            "window_days": args.days,
+            "instances": results,
+        }
         with open(args.out, "w") as f:
             json.dump(payload, f, indent=2)
         print(f"\nWrote {args.out} ({len(results)} instances)", file=sys.stderr)
 
     for r in results:
         if r["memory_source"] is None:
-            print(f"  ! {r['instance_id']}: no memory metric found (install CloudWatch agent / Container Insights)", file=sys.stderr)
+            print(
+                f"  ! {r['instance_id']}: no memory metric found (install CloudWatch agent / Container Insights)",
+                file=sys.stderr,
+            )
         if r["observed_hours"] < 168:
-            print(f"  ! {r['instance_id']}: only {r['observed_hours']}h of data; too little for a reliable recommendation", file=sys.stderr)
+            print(
+                f"  ! {r['instance_id']}: only {r['observed_hours']}h of data; too little for a reliable recommendation",
+                file=sys.stderr,
+            )
 
     if args.model_id:
         print("\n" + ask_claude(args.region, args.model_id, payload))
     else:
-        print("No --model-id given: skipped AI step. Paste the JSON into Claude, or rerun with --model-id.", file=sys.stderr)
+        print(
+            "No --model-id given: skipped AI step. Paste the JSON into Claude, or rerun with --model-id.",
+            file=sys.stderr,
+        )
 
 
 if __name__ == "__main__":
